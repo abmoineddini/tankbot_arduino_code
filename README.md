@@ -18,4 +18,5 @@ Arduino Pin Assignment is as follows:
 
 ## Robot_Controller_Joy_Stick:
 The arduino code for the joy stick for the controlling the robot. For this project part of the project I am using the Adeept Remote Control Shield V2.0 along with the Arduino NANO IoT 33. The Arduino NANO IoT 33 was chosen because of its bluethooth and Wifi on board and the pins are exactly the same as the Arduino nano which this shield was originally designed for. 
+The tutorial for the sheild is availble is [here](https://www.adeept.com/blog/tutorials/adeept-remote-control-shield-introduction.html "remote control sheild").
 
