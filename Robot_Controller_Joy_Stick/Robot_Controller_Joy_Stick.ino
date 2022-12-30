@@ -6,7 +6,6 @@
 
 // libraries
 #include <SPI.h>
-#include <SPI.h>
 #include <WiFiNINA.h>
 
 // remote controller pin set up
@@ -90,66 +89,42 @@ void loop() {
   int axis_X_2 = map(data[2]-203, -210, 210, -100, 100);
   int axis_Y_2 = map(data[3]-205, -210, 210, -100, 100);
 
-  if(axis_X_1 <= 2 && axis_X_1 >= -2){
+  if(axis_X_1 <= 5 && axis_X_1 >= -5){
     axis_X_1 = 0;
   }
-  if(axis_Y_1 <= 2 && axis_Y_1 >= -2){
+  if(axis_Y_1 <= 5 && axis_Y_1 >= -5){
     axis_Y_1 = 0;
   }
-  if(axis_X_2 <= 2 && axis_X_2 >= -2){
+  if(axis_X_2 <= 5 && axis_X_2 >= -5){
     axis_X_2 = 0;
   }
-  if(axis_Y_2 <= 2 && axis_Y_2 >= -2){
+  if(axis_Y_2 <= 5 && axis_Y_2 >= -5){
     axis_Y_2 = 0;
   }
   
-  // Printing Data in Serial monitor
-  Serial.print("Data : ");
-  Serial.print(axis_X_1);
-  Serial.print(", ");
-  Serial.print(axis_Y_1);
-  Serial.print(", ");
-  Serial.print(axis_X_2);
-  Serial.print(", ");
-  Serial.print(axis_Y_2);
-  Serial.print(", ");
-  Serial.print(data[4]);
-  Serial.print(", ");
-  Serial.print(data[5]);
-  Serial.print(", ");
-  Serial.print(data[6]);
-  Serial.print(", ");
-  Serial.print(data[7]);
-  Serial.print(", ");
-  Serial.print(data[8]);
-  Serial.print(", ");
-  Serial.println(data[9]);
-  
   // webserver print
-  server.print("Axis : ");
+  server.print("Data:");
   server.print(axis_X_1);
-  server.print(", ");
+  server.print(",");
   server.print(axis_Y_1);
-  server.print(", ");
+  server.print(",");
   server.print(axis_X_2);
-  server.print(", ");
-  server.println(axis_Y_2);
-  server.print("Buttons : ");
+  server.print(",");
+  server.print(axis_Y_2);
+  server.print(",");
   server.print(data[4]);
-  server.print(", ");
+  server.print(",");
   server.print(data[5]);
-  server.print(", ");
+  server.print(",");
   server.print(data[6]);
-  server.print(", ");
+  server.print(",");
   server.println(data[7]);
-  server.println("");
+  // server.println("");
   
   // Setting LED data
   WiFiClient client = server.available();
   if (client == true) {
-    digitalWrite(led1Pin,HIGH);             // Red LED for blinking
-    delay(2);
-    digitalWrite(led1Pin,LOW);
+    digitalWrite(led1Pin,!digitalRead(led1Pin));             // Red LED for blinking
   }
   
   if(mode==0){
@@ -161,5 +136,5 @@ void loop() {
       digitalWrite(led3Pin,HIGH);
   }
   
-  delay(500);
+  delay(10);
 }
