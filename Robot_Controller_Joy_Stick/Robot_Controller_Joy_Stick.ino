@@ -3,8 +3,13 @@
  * Email:   abmoineddini@gmail.com
  * Project: Robot Controller Joystick
  */
-#include <SPI.h>
 
+// libraries
+#include <SPI.h>
+#include <SPI.h>
+#include <WiFiNINA.h>
+
+// remote controller pin set up
 int data[10];                  // Initiating Data array
 int mode =0;                   // define the mode
 const int U2_Pot = 5;          // define R6
@@ -21,9 +26,17 @@ const int U1_Y = 1;            // define pin for direction X of joystick U1
 const int U2_X = 2;            // define pin for direction X of joystick U2
 const int U2_Y = 3;            // define pin for direction Y of joystick U2
 
+// wifi setup
+char ssid[] = "Robotics";
+char pass[] = "Robot2021";
+int status = WL_IDLE_STATUS;
+WiFiServer server(80);
 
 void setup() {
+  // Initialising Serial
   Serial.begin(115200);
+
+  // Initialising pins
   pinMode(led1Pin, OUTPUT);       // set led1Pin to output mode
   pinMode(led2Pin, OUTPUT);       // set led2Pin to output mode
   pinMode(led3Pin, OUTPUT);       // set led3Pin to output mode
@@ -31,6 +44,20 @@ void setup() {
   pinMode(B_But, INPUT_PULLUP);   // set BPin to output mode
   pinMode(C_But, INPUT_PULLUP);   // set CPin to output mode
   pinMode(D_But, INPUT_PULLUP);   // set DPin to output mode
+  
+  // initializing wifi
+  Serial.println("Attempting to connect to WPA network...");
+  Serial.print("SSID: ");
+  Serial.println(ssid);
+
+  status = WiFi.begin(ssid, pass);
+  if ( status != WL_CONNECTED) {
+    Serial.println("Couldn't get a WiFi connection");
+    while(true);
+  }
+  else {
+    server.begin();
+  }
 }
 void loop() {
   // put the values of rocker, switch and potentiometer into the array
@@ -97,12 +124,33 @@ void loop() {
   Serial.print(data[8]);
   Serial.print(", ");
   Serial.println(data[9]);
-  digitalWrite(led1Pin,HIGH);
   
-  // Setting LED data 
-  digitalWrite(led1Pin,HIGH);             // Red LED for blinking
-  delay(2);
-  digitalWrite(led1Pin,LOW);
+  // webserver print
+  server.print("Axis : ");
+  server.print(axis_X_1);
+  server.print(", ");
+  server.print(axis_Y_1);
+  server.print(", ");
+  server.print(axis_X_2);
+  server.print(", ");
+  server.println(axis_Y_2);
+  server.print("Buttons : ");
+  server.print(data[4]);
+  server.print(", ");
+  server.print(data[5]);
+  server.print(", ");
+  server.print(data[6]);
+  server.print(", ");
+  server.println(data[7]);
+  server.println("");
+  
+  // Setting LED data
+  WiFiClient client = server.available();
+  if (client == true) {
+    digitalWrite(led1Pin,HIGH);             // Red LED for blinking
+    delay(2);
+    digitalWrite(led1Pin,LOW);
+  }
   
   if(mode==0){
     digitalWrite(led2Pin,HIGH);
@@ -113,5 +161,5 @@ void loop() {
       digitalWrite(led3Pin,HIGH);
   }
   
-  delay(1000);
+  delay(500);
 }
