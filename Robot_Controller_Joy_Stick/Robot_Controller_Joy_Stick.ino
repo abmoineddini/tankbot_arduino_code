@@ -29,11 +29,12 @@ const int U2_Y = 3;            // define pin for direction Y of joystick U2
 char ssid[] = "Robotics";
 char pass[] = "Robot2021";
 int status = WL_IDLE_STATUS;
-WiFiServer server(80);
+IPAddress ip(192, 168, 137, 200); // setting static IP address
+WiFiServer server(80);            // setting wifi server port 
 
 void setup() {
   // Initialising Serial
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   // Initialising pins
   pinMode(led1Pin, OUTPUT);       // set led1Pin to output mode
@@ -48,7 +49,7 @@ void setup() {
   Serial.println("Attempting to connect to WPA network...");
   Serial.print("SSID: ");
   Serial.println(ssid);
-
+  WiFi.config(ip);
   status = WiFi.begin(ssid, pass);
   if ( status != WL_CONNECTED) {
     Serial.println("Couldn't get a WiFi connection");
@@ -57,6 +58,8 @@ void setup() {
   else {
     server.begin();
   }
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
 }
 void loop() {
   // put the values of rocker, switch and potentiometer into the array
@@ -84,10 +87,10 @@ void loop() {
   data[9] = analogRead(U2_Pot);
 
   // Mapping the outputs
-  int axis_X_1 = map(data[0]-205, -210, 210, -100, 100);
-  int axis_Y_1 = map(data[1]-196, -210, 210, -100, 100);
-  int axis_X_2 = map(data[2]-203, -210, 210, -100, 100);
-  int axis_Y_2 = map(data[3]-205, -210, 210, -100, 100);
+  float axis_X_1 = map(data[0]-205, -210, 210, -100, 100);
+  float axis_Y_1 = map(data[1]-205, -210, 210, -100, 100);
+  float axis_X_2 = map(data[2]-205, -210, 210, -100, 100);
+  float axis_Y_2 = map(data[3]-205, -210, 210, -100, 100);
 
   if(axis_X_1 <= 5 && axis_X_1 >= -5){
     axis_X_1 = 0;
@@ -104,13 +107,13 @@ void loop() {
   
   // webserver print
   server.print("Data:");
-  server.print(axis_X_1);
+  server.print(axis_X_1/100);
   server.print(",");
-  server.print(axis_Y_1);
+  server.print(axis_Y_1/100);
   server.print(",");
-  server.print(axis_X_2);
+  server.print(axis_X_2/100);
   server.print(",");
-  server.print(axis_Y_2);
+  server.print(axis_Y_2/100);
   server.print(",");
   server.print(data[4]);
   server.print(",");
@@ -118,8 +121,8 @@ void loop() {
   server.print(",");
   server.print(data[6]);
   server.print(",");
-  server.println(data[7]);
-  // server.println("");
+  server.print(data[7]);
+  server.println(",");
   
   // Setting LED data
   WiFiClient client = server.available();

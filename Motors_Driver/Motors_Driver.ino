@@ -16,7 +16,7 @@
 #define ENC_IN_RIGHT_A 2    // right motor encoders 
 #define ENC_IN_RIGHT_B 9
 #define ENC_IN_LEFT_A 3     // left motor encoders 
-#define ENC_IN_LEFT_B 10
+#define ENC_IN_LEFT_B 11
 const int E1 = 5;           // right motor speed (PWM)
 const int M1 = 4;           // right motor direction pin
 const int E2 = 6;           // left motor speed (PWM)
