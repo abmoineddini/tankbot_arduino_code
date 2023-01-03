@@ -108,19 +108,19 @@ void setup() {
 void loop() {
   if(Serial.available()!=0){
   msg = Serial.readString();
-  Serial.println(msg);
+  // Serial.println(msg);
   control_type = msg.substring(0, 1);
   String L_command = msg.substring(2,msg.indexOf(" ", 3));
   String R_command = msg.substring(msg.indexOf(" ", 3)+1);
   speed_left_set = L_command.toInt();
   speed_right_set = R_command.toInt();
 
-  Serial.print("type: ");
-  Serial.println(control_type);
-  Serial.print("L-Command: ");
-  Serial.println(speed_left_set);
-  Serial.print("R-Command: ");
-  Serial.println(speed_right_set);
+  // Serial.print("type: ");
+  // Serial.println(control_type);
+  // Serial.print("L-Command: ");
+  // Serial.println(speed_left_set);
+  // Serial.print("R-Command: ");
+  // Serial.println(speed_right_set);
   }
 
   // close loop control
@@ -141,46 +141,46 @@ void loop() {
       
 
       
-      Serial.print(" L-Pulses: ");
-      Serial.print(left_wheel_pulse_count);
-      Serial.print("   |   R-Pulses: ");
-      Serial.println(right_wheel_pulse_count);
+      // Serial.print(" L-Pulses: ");
+      // Serial.print(left_wheel_pulse_count);
+      // Serial.print("   |   R-Pulses: ");
+      // Serial.println(right_wheel_pulse_count);
 
-      Serial.print(" L-Speed: "); 
-      Serial.print(rpm_left);
-      Serial.print(" RPM");
-      Serial.print("    |    R-Speed: ");
-      Serial.print(rpm_right);
-      Serial.println(" RPM");
+      // Serial.print(" L-Speed: "); 
+      // Serial.print(rpm_left);
+      // Serial.print(" RPM");
+      // Serial.print("    |    R-Speed: ");
+      // Serial.print(rpm_right);
+      // Serial.println(" RPM");
 
-      Serial.print(" L-PWM: ");
-      Serial.print(output_L);
-      Serial.print("    |    R-PWM: ");
-      Serial.println(output_R);
+      // Serial.print(" L-PWM: ");
+      // Serial.print(output_L);
+      // Serial.print("    |    R-PWM: ");
+      // Serial.println(output_R);
 
-      Serial.print(" V-L: ");
-      Serial.print(ang_velocity_right_deg_left);
-      Serial.print(" m/s");
-      Serial.print("    |    V-R: ");
-      Serial.println(ang_velocity_right_deg_right);
-      Serial.print(" m/s");
-      Serial.println("");
+      // Serial.print(" V-L: ");
+      // Serial.print(ang_velocity_right_deg_left);
+      // Serial.print(" m/s");
+      // Serial.print("    |    V-R: ");
+      // Serial.println(ang_velocity_right_deg_right);
+      // Serial.print(" m/s");
+      // Serial.println("");
   
       right_wheel_pulse_count = 0;
       left_wheel_pulse_count = 0;
     }
     if(speed_right_set<0){
-      digitalWrite(M1,HIGH); // rotating backwards right wheel
+      digitalWrite(M1,LOW); // rotating backwards right wheel
     }
     else{
-      digitalWrite(M1,LOW); // rotating forwards right wheel
+      digitalWrite(M1,HIGH); // rotating forwards right wheel
     }
 
     if(speed_left_set<0){
-      digitalWrite(M2, LOW); // rotating backwards left wheel 
+      digitalWrite(M2, HIGH); // rotating backwards left wheel 
     }
     else{
-      digitalWrite(M2, HIGH);
+      digitalWrite(M2, LOW);
     }
     input_L = rpm_left;
     input_R = rpm_right;
@@ -197,17 +197,17 @@ void loop() {
   // open loop controll
   else if (control_type=="o"){
     if(speed_right_set<0){
-      digitalWrite(M1,HIGH); // rotating backwards right wheel
+      digitalWrite(M1,LOW); // rotating backwards right wheel
     }
     else{
-      digitalWrite(M1,LOW); // rotating forwards right wheel
+      digitalWrite(M1,HIGH); // rotating forwards right wheel
     }
 
     if(speed_left_set<0){
-      digitalWrite(M2, LOW); // rotating backwards left wheel 
+      digitalWrite(M2, HIGH); // rotating backwards left wheel 
     }
     else{
-      digitalWrite(M2, HIGH);
+      digitalWrite(M2, LOW);
     }
     analogWrite(E1, speed_right_set);
     analogWrite(E2, speed_left_set);
